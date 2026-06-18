@@ -6,15 +6,12 @@ import { GenerateSummary } from "../utils/gemini.js";
 import { GenerateOllamaSummary } from "../utils/ollama.js";
 import extractedText from "../utils/extract.js";
 
-// Configure cloudinary
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME as string,
     api_key: process.env.CLOUDINARY_API_KEY as string,
     api_secret: process.env.CLOUDINARY_API_SECRET as string,
 });
-
 console.log("Cloudinary configured in documentController");
-
 export const FileUpload = async (req: Request, res:Response) => {
     try {
         if ((!req as any).file) {

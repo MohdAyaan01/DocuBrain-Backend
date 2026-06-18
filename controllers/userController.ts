@@ -8,7 +8,6 @@ interface AuthBody{
   email: string,
   password: string
 }
-
 export const SignUp = async (req:Request, res:Response) => {
   try {
     const { name, email, password } = req.body as AuthBody;
@@ -24,14 +23,11 @@ export const SignUp = async (req:Request, res:Response) => {
       email,
       password: hashPassword
     })
-
-    // Remove password before sending
     const userWithoutPassword = {
       _id: newUser._id,
       name: newUser.name,
       email: newUser.email
     };
-
     return res.status(200).json({
       message: "Account Created SuccessFully...",
       success: true,
@@ -42,7 +38,6 @@ export const SignUp = async (req:Request, res:Response) => {
     res.status(500).json({ message: "Internal Server Error", success: false });
   }
 }
-
 export const Login = async (req:Request, res:Response) => {
   try {
     const { email, password } = req.body as AuthBody;
@@ -53,48 +48,39 @@ export const Login = async (req:Request, res:Response) => {
         success: false,
       });
     }
-
     const user = await User.findOne({ email });
-
     if (!user) {
       return res.status(400).json({
         message: "Incorrect Email And Password...",
         success: false,
       });
     }
-
     const isPasswordMatch = await bcrypt.compare(password, user.password);
-
     if (!isPasswordMatch) {
       return res.status(401).json({
         message: "Incorrect Email And Password...",
         success: false,
       });
     }
-
     const tokenData = {
       userId: user._id,
     };
-
     const token = jwt.sign(
       tokenData,
       process.env.SECRET_KEY as string,
       { expiresIn: "1d" }
     );
-
-    // Remove password from user object
     const userWithoutPassword = {
       _id: user._id,
       name: user.name,
       email: user.email
     };
-
     return res
       .status(200)
       .cookie("token", token, {
         maxAge: 24 * 60 * 60 * 1000,
         httpOnly: true,
-        sameSite: "lax", // Changed from strict for better dev compatibility
+        sameSite: "lax", 
       })
       .json({
         message: `${user.name} Login Successfully...`,

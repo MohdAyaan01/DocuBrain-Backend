@@ -13,13 +13,11 @@ const isAuthenticated = async (req:Request, res:Response, next:NextFunction) => 
             console.log("Auth Failure: No token in cookies");
             return res.status(401).json({ message: "User Not Authenticated..." });
         }
-
         const decode = await jwt.verify(token, process.env.SECRET_KEY as string) as JWTPayload;
         if (!decode) {
             console.log("Auth Failure: Token verification failed");
             return res.status(401).json({ message: "Invalid Token..." });
         }
-
         console.log("Auth Success: User authenticated with ID:", decode.userId);
         (req as any).id = decode.userId;
         next();

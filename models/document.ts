@@ -9,7 +9,6 @@ interface IDocument extends MongooseDocument {
     totalPages: number,
     summary: string
 }
-
 const DocSchema = new Schema<IDocument>({
     userId:{
         type: mongoose.Schema.Types.ObjectId,
@@ -41,5 +40,4 @@ const DocSchema = new Schema<IDocument>({
         default: ""
     }
 },{ timestamps: true });
-
 export const Document = mongoose.model<IDocument>("Document", DocSchema);

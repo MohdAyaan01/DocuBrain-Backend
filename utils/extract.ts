@@ -13,5 +13,4 @@ const extractedText = async (pdfBuffer:Buffer) => {
         throw error;
     }
 }
-
 export default extractedText;
